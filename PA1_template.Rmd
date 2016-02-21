@@ -44,7 +44,38 @@ On average, the most steps were taking on the interval named `r mostActiveInterv
 
 ## Imputing missing values
 
+```{r, echo=TRUE}
+set.seed(1337)
 
+completeCases <-complete.cases(rawData)
+completeCaseCount <- sum(completeCases)
+missingDataCount <- nrow(rawData) - completeCaseCount
 
+```
+
+There are `r nrow(rawData)` observations in the data set, of which `r missingDataCount` are missing a "steps" count and `r completeCaseCount` are complete.
+Since the presence of missing days may introduce some bias, the missing data is filled in by using either the mean or the median value for that interval. Whether the mean or the median is used is determined by a coin flip.
+
+```{r, echo=TRUE}
+
+medianSteps <- sapply(splitByInterval, function(x){median(x$steps, na.rm=TRUE)})
+completeData <- rawData
+
+completeData[!completeCases,]$steps <- sapply(rawData[!completeCases,]$interval, function(x){
+  coinflip <- rbinom(1,1,.5)[1]
+  if(coinflip == 0) {
+    avgSteps[as.character(x)]
+  } else {
+      medianSteps[as.character(x)]
+    }
+  })
+
+completeSplitByDay <- split(completeData, completeData$date)
+completeStepsPerDay <- sapply(completeSplitByDay, function(x){ sum(x$steps, na.rm=TRUE)})
+hist(completeStepsPerDay, xlab = "Sum of Steps Per Day", main="Histogram for Steps Per Day With Completed Data")
+
+```
+
+The median steps taken per day is using "complete" data is `r format(median(completeStepsPerDay), digits=10)`, while the mean is `r format(mean(completeStepsPerDay), digits=10)`. The median value has not changed from the original, incomplete data set, but the mean value has gone up by `r mean(completeStepsPerDay) - mean(stepsPerDay) `. The histogram also has a stronger grouping toward the middle.
 ## Are there differences in activity patterns between weekdays and weekends?
 
