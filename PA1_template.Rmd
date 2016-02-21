@@ -40,7 +40,7 @@ hourOfDay <- as.integer(as.integer(mostActiveInterval)/60)
 minuteOfHour <-as.integer(mostActiveInterval)- hourOfDay*60
 ```
 
-On average, the most steps were taking on the interval named `r mostActiveInterval`, which is `r hourOfDay`:`r minuteOfHour`.
+On average, the most steps were taken on the interval named `r mostActiveInterval`, which is `r hourOfDay`:`r minuteOfHour`.
 
 ## Imputing missing values
 
