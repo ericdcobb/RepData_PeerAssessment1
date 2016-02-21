@@ -8,6 +8,8 @@ output:
 
 ## Loading and preprocessing the data
 
+The data will be unzipped and read as a data frame. The only processing that is performed is to convert the date column into an actual date field.
+
 ```{r, echo=TRUE}
 unzip("activity.zip")
 rawData <- read.csv("activity.csv")
@@ -16,7 +18,7 @@ rawData$date <- as.Date(rawData$date)
 
 ## What is mean total number of steps taken per day?
 
-First, lets look at the number of steps taken per day. In this analysis, missing data will be ignored. Here is a histogram describing the distribution of total steps per day:
+First, we examine the number of steps taken per day. In this analysis, missing data will be ignored.
 
 ```{r, echo=TRUE}
 splitByDay <- split(rawData, rawData$date)
@@ -25,9 +27,20 @@ hist(stepsPerDay, xlab = "Sum of Steps Per Day", main="Histogram for Steps Per D
 ```
 
 The median steps taken per day is `r median(stepsPerDay)`, while the mean is `r mean(stepsPerDay)`.
-## What is the average daily activity pattern?
+## What is the average daily activity pattern
 
+To explore the average daily activity pattern, we take the mean of every five-minute interval across all days.
+```{r, echo=TRUE}
+splitByInterval <- split(rawData, rawData$interval)
+avgSteps <- sapply(splitByInterval, function(x){mean(x$steps, na.rm=TRUE)})
+plot.ts(avgSteps,ylab="Average Steps Taken", xlab="Time", main="Average Activity Throughout the Day")
 
+mostActiveInterval <- names(which.max(avgSteps))
+hourOfDay <- as.integer(as.integer(mostActiveInterval)/60)
+minuteOfHour <-as.integer(mostActiveInterval)- hourOfDay*60
+```
+
+On average, the most steps were taking on the interval named `r mostActiveInterval`, which is `r hourOfDay`:`r minuteOfHour`.
 
 ## Imputing missing values
 
