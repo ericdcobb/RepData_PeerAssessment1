@@ -25,7 +25,7 @@ First, we examine the number of steps taken per day. In this analysis, missing d
 ```r
 splitByDay <- split(rawData, rawData$date)
 stepsPerDay <- sapply(splitByDay, function(x){ sum(x$steps, na.rm=TRUE)})
-hist(stepsPerDay, xlab = "Sum of Steps Per Day", main="Histogram for Steps Per Day")
+hist(stepsPerDay, xlab = "Sum of Steps Per Day", main="Histogram for Steps Per Day", col="green")
 ```
 
 ![plot of chunk unnamed-chunk-2](figure/unnamed-chunk-2-1.png)
@@ -38,7 +38,7 @@ To explore the average daily activity pattern, we take the mean of every five-mi
 ```r
 splitByInterval <- split(rawData, rawData$interval)
 avgSteps <- sapply(splitByInterval, function(x){mean(x$steps, na.rm=TRUE)})
-plot.ts(avgSteps,ylab="Average Steps Taken", xlab="Time", main="Average Activity Throughout the Day")
+plot.ts(avgSteps,ylab="Average Steps Taken", xlab="Time", main="Average Activity Throughout the Day", col="blue")
 ```
 
 ![plot of chunk unnamed-chunk-3](figure/unnamed-chunk-3-1.png)
@@ -82,7 +82,7 @@ completeData[!completeCases,]$steps <- sapply(rawData[!completeCases,]$interval,
 
 completeSplitByDay <- split(completeData, completeData$date)
 completeStepsPerDay <- sapply(completeSplitByDay, function(x){ sum(x$steps, na.rm=TRUE)})
-hist(completeStepsPerDay, xlab = "Sum of Steps Per Day", main="Histogram for Steps Per Day With Completed Data")
+hist(completeStepsPerDay, xlab = "Sum of Steps Per Day", main="Histogram for Steps Per Day With Completed Data", col="green")
 ```
 
 ![plot of chunk unnamed-chunk-5](figure/unnamed-chunk-5-1.png)
@@ -114,8 +114,8 @@ splitByIntervalComplete_weekends <- split(completeWeekends, completeWeekends$int
 completeAverageSteps_weekends <- sapply(splitByIntervalComplete_weekends, function(x){mean(x$steps, na.rm=TRUE)})
 
 par(mfrow = c(2,1))
-plot.ts(completeAverageSteps_weekdays,ylab="Average Steps Taken", xlab="Time", main="Average Activity Throughout a Weekday")
-plot.ts(completeAverageSteps_weekends,ylab="Average Steps Taken", xlab="Time", main="Average Activity Throughout on Saturday or Sunday")
+plot.ts(completeAverageSteps_weekdays,ylab="Average Steps Taken", xlab="Time", main="Average Activity Throughout a Weekday", col="blue")
+plot.ts(completeAverageSteps_weekends,ylab="Average Steps Taken", xlab="Time", main="Average Activity Throughout on Saturday or Sunday", col="green")
 ```
 
 ![plot of chunk unnamed-chunk-6](figure/unnamed-chunk-6-1.png)
